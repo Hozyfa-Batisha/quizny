@@ -1,31 +1,50 @@
+/* ════════════════════════════════════════════════════════════════════
+   COMPONENTS.CSS – Buttons, Cards, Viewer, Summary Content
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ─── BUTTONS ────────────────────────────────────────────────────── */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  padding: 12px 26px;
   border-radius: var(--radius-md);
   font-size: 0.9rem;
-  font-weight: 600;
-  border: 1px solid transparent;
+  font-weight: 700;
+  border: 1.5px solid transparent;
   cursor: pointer;
-  transition: var(--transition);
+  transition: transform var(--transition-bounce), box-shadow var(--transition),
+              background var(--transition), border-color var(--transition), color var(--transition);
   text-decoration: none;
+  overflow: hidden;
+  letter-spacing: 0.01em;
 }
 
-.btn:hover {
-  text-decoration: none;
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  opacity: 0;
+  transition: opacity var(--transition);
+  border-radius: inherit;
 }
+
+.btn:hover::after { opacity: 1; }
+.btn:active { transform: scale(0.97); }
+.btn:hover { text-decoration: none; transform: translateY(-2px); }
 
 .btn-primary {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
   border-color: var(--color-primary);
+  box-shadow: 0 4px 16px var(--color-primary-glow);
 }
 
 .btn-primary:hover {
-  background: var(--color-primary-light);
-  border-color: var(--color-primary-light);
+  box-shadow: 0 8px 28px var(--color-primary-glow);
 }
 
 .btn-secondary {
@@ -36,35 +55,64 @@
 
 .btn-secondary:hover {
   background: var(--color-primary-soft);
-  border-color: var(--color-primary-light);
+  border-color: var(--color-primary);
 }
 
 .btn-success {
-  background: var(--color-success);
+  background: linear-gradient(135deg, var(--color-success), #10b981);
   color: #fff;
+  border-color: var(--color-success);
+  box-shadow: 0 4px 16px rgba(5, 150, 105, 0.3);
+}
+
+.btn-success:hover {
+  box-shadow: 0 8px 28px rgba(5, 150, 105, 0.4);
 }
 
 .btn:disabled {
-  opacity: 0.45;
+  opacity: 0.4;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
+/* ─── LESSON CARD ────────────────────────────────────────────────── */
 .lesson-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: 28px;
   display: flex;
   flex-direction: column;
-  transition: var(--transition);
+  transition: transform var(--transition-bounce), box-shadow var(--transition),
+              border-color var(--transition), background var(--transition);
   cursor: pointer;
   box-shadow: var(--shadow-sm);
+  animation: fadeInScale 0.5s ease both;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle gradient accent line on top */
+.lesson-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent), var(--color-teal));
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-slow);
 }
 
 .lesson-card:hover {
-  border-color: var(--color-primary-light);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px);
+}
+
+.lesson-card:hover::before {
+  transform: scaleX(1);
 }
 
 .lesson-card-header {
@@ -75,25 +123,52 @@
 }
 
 .lesson-order {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--color-accent);
-  background: var(--color-accent-soft);
-  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--color-primary);
+  background: var(--color-primary-soft);
+  padding: 4px 12px;
   border-radius: 100px;
   font-family: var(--font-latin);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  transition: background var(--transition), color var(--transition);
+}
+
+.lesson-card:hover .lesson-order {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.lesson-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--color-primary-soft), var(--color-teal-soft));
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: transform var(--transition-bounce);
+}
+
+.lesson-card:hover .lesson-icon {
+  transform: rotate(10deg) scale(1.1);
 }
 
 .lesson-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.08rem;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-text);
   line-height: 1.45;
   margin-bottom: 6px;
+  transition: color var(--transition);
 }
 
+.lesson-card:hover h3 { color: var(--color-primary); }
+
 .lesson-en {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
   font-family: var(--font-latin);
   margin-bottom: 12px;
@@ -104,23 +179,31 @@
   color: var(--color-text-secondary);
   flex: 1;
   margin-bottom: 20px;
+  line-height: 1.7;
 }
 
 .lesson-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 20px;
 }
 
 .tag {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 4px 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
   border-radius: 100px;
   background: var(--color-surface-muted);
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border-light);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.lesson-card:hover .tag {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  border-color: rgba(79, 70, 229, 0.2);
 }
 
 .lesson-card-footer {
@@ -132,17 +215,22 @@
 }
 
 .lesson-card-footer .btn {
-  padding: 10px 18px;
-  font-size: 0.85rem;
+  padding: 9px 18px;
+  font-size: 0.82rem;
 }
 
 .lesson-meta-text {
   font-size: 0.78rem;
   color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
+/* ─── LESSON VIEWER ──────────────────────────────────────────────── */
 .viewer-shell {
   min-height: calc(100vh - var(--header-height));
+  animation: fadeIn 0.3s ease;
 }
 
 .viewer-toolbar {
@@ -152,6 +240,12 @@
   position: sticky;
   top: var(--header-height);
   z-index: 90;
+  backdrop-filter: blur(8px);
+  transition: background var(--transition-slow), border-color var(--transition);
+}
+
+[data-theme="dark"] .viewer-toolbar {
+  background: rgba(19, 25, 41, 0.9);
 }
 
 .viewer-toolbar-inner {
@@ -160,11 +254,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .viewer-breadcrumb {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
 }
 
@@ -175,23 +269,24 @@
 
 .viewer-title {
   flex: 1;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--color-primary);
-  min-width: 200px;
+  color: var(--color-text);
+  min-width: 180px;
 }
 
+/* ─── TABS ───────────────────────────────────────────────────────── */
 .viewer-tabs {
   display: flex;
   gap: 4px;
   background: var(--color-surface-muted);
   padding: 4px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-light);
+  border: 1px solid var(--color-border);
 }
 
 .tab-btn {
-  padding: 8px 18px;
+  padding: 8px 20px;
   border: none;
   background: transparent;
   color: var(--color-text-secondary);
@@ -199,7 +294,7 @@
   font-weight: 600;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: var(--transition);
+  transition: background var(--transition), color var(--transition), box-shadow var(--transition);
 }
 
 .tab-btn.active {
@@ -210,35 +305,31 @@
 
 .tab-btn:not(.active):hover {
   color: var(--color-primary);
+  background: var(--color-surface-hover);
 }
 
 .viewer-content {
   max-width: var(--content-width);
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: 44px 24px 88px;
 }
 
-.tab-panel {
-  display: none;
-}
+.tab-panel { display: none; }
 
 .tab-panel.active {
   display: block;
-  animation: fadeIn 0.25s ease;
+  animation: fadeIn 0.3s ease both;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
+/* ─── OBJECTIVES BOX ─────────────────────────────────────────────── */
 .objectives-box {
   background: var(--color-primary-soft);
-  border: 1px solid #c9daf0;
+  border: 1px solid rgba(79, 70, 229, 0.2);
   border-right: 4px solid var(--color-primary);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 24px 28px;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
+  transition: background var(--transition-slow), border-color var(--transition);
 }
 
 .objectives-box h2,
@@ -247,6 +338,9 @@
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .objectives-list {
@@ -255,82 +349,96 @@
 
 .objectives-list li {
   color: var(--color-text-secondary);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  position: relative;
 }
 
+/* ─── SUMMARY BODY ───────────────────────────────────────────────── */
 .summary-body h2 {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--color-primary);
-  margin: 36px 0 16px;
-  padding-bottom: 10px;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--color-text);
+  margin: 40px 0 16px;
+  padding-bottom: 12px;
   border-bottom: 2px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.summary-body h1 {
-  display: none;
+.summary-body h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 22px;
+  background: linear-gradient(180deg, var(--color-primary), var(--color-accent));
+  border-radius: 4px;
+  flex-shrink: 0;
 }
 
-.summary-body h2:first-child {
-  margin-top: 0;
-}
+.summary-body h1 { display: none; }
+.summary-body h2:first-child { margin-top: 0; }
 
 .summary-body h3 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--color-primary-light);
-  margin: 24px 0 12px;
+  color: var(--color-primary);
+  margin: 28px 0 12px;
 }
 
 .summary-body p {
   color: var(--color-text-secondary);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  line-height: 1.8;
 }
 
 .summary-body ul,
 .summary-body ol {
   padding-right: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .summary-body li {
   color: var(--color-text-secondary);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  line-height: 1.7;
 }
 
-.summary-body strong {
-  color: var(--color-text);
-}
+.summary-body strong { color: var(--color-text); }
 
 .summary-body code {
   background: var(--color-surface-muted);
   color: var(--color-primary);
-  padding: 2px 7px;
-  border-radius: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: 0.84em;
   direction: ltr;
   display: inline-block;
+  border: 1px solid var(--color-border);
 }
 
 .summary-body pre {
-  background: #1e293b;
-  color: #e2e8f0;
-  border-radius: var(--radius-md);
-  padding: 20px;
-  margin: 16px 0;
+  background: #0d1117;
+  color: #e6edf3;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin: 20px 0;
   overflow-x: auto;
   font-family: var(--font-mono);
   font-size: 0.85rem;
-  line-height: 1.6;
+  line-height: 1.7;
   direction: ltr;
   text-align: left;
+  border: 1px solid #30363d;
+  box-shadow: var(--shadow-md);
 }
 
 .summary-body pre code {
   background: none;
   color: inherit;
   padding: 0;
+  border: none;
 }
 
 .summary-body .math,
@@ -343,16 +451,18 @@
   background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: 16px;
-  margin: 16px 0;
+  padding: 18px;
+  margin: 18px 0;
   overflow-x: auto;
 }
 
+/* ─── TABLE ──────────────────────────────────────────────────────── */
 .table-wrap {
   overflow-x: auto;
-  margin: 20px 0;
+  margin: 24px 0;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .summary-table {
@@ -362,44 +472,54 @@
 }
 
 .summary-table th {
-  background: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: #fff;
-  padding: 12px 16px;
-  font-weight: 600;
+  padding: 13px 18px;
+  font-weight: 700;
   text-align: right;
   white-space: nowrap;
 }
 
 .summary-table td {
-  padding: 11px 16px;
+  padding: 12px 18px;
   border-top: 1px solid var(--color-border-light);
   color: var(--color-text-secondary);
   vertical-align: top;
+  transition: background var(--transition);
 }
+
+.summary-table tr:hover td { background: var(--color-surface-hover); }
 
 .summary-table tr:nth-child(even) td {
   background: var(--color-surface-muted);
 }
 
+/* ─── EXERCISES ──────────────────────────────────────────────────── */
 .exercises-section {
-  margin-top: 48px;
-  padding-top: 32px;
+  margin-top: 52px;
+  padding-top: 36px;
   border-top: 2px solid var(--color-border);
 }
 
 .exercises-section h2 {
   font-size: 1.2rem;
   font-weight: 700;
-  color: var(--color-primary);
-  margin-bottom: 20px;
+  color: var(--color-text);
+  margin-bottom: 24px;
 }
 
 .exercise-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: 24px;
   margin-bottom: 16px;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.exercise-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
 }
 
 .exercise-card h3 {
@@ -413,8 +533,4 @@
 .exercise-card li {
   font-size: 0.9rem;
   color: var(--color-text-secondary);
-}
-
-.hidden {
-  display: none !important;
 }
