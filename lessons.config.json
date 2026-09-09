@@ -1,0 +1,29 @@
+[
+  {
+    "id": "it-evolution",
+    "order": 1,
+    "titleAr": "تطور تكنولوجيا المعلومات والتحول الاجتماعي",
+    "titleEn": "IT Evolution & Social Transformation",
+    "description": "تتبع المراحل التاريخية، قانون مور، التغيرات الاجتماعية، والتقنيات الناشئة.",
+    "summaryFile": "it-evolution-summary.md",
+    "questionsFile": "it-evolution-questions.md"
+  },
+  {
+    "id": "numbering-systems",
+    "order": 2,
+    "titleAr": "أنظمة العد الرقمية",
+    "titleEn": "Digital Numbering Systems",
+    "description": "الأنظمة العشري والثنائي والثماني والست عشري، وعمليات التحويل بينها.",
+    "summaryFile": "numbering-systems-summary.md",
+    "questionsFile": "numbering-systems-questions.md"
+  },
+  {
+    "id": "how-ai-works",
+    "order": 3,
+    "titleAr": "كيف يعمل الذكاء الاصطناعي؟",
+    "titleEn": "How AI Works",
+    "description": "مفاهيم الذكاء الاصطناعي، تعلم الآلة، الشبكات العصبية، والتحديات الأخلاقية.",
+    "summaryFile": "how-ai-works-summary.md",
+    "questionsFile": "how-ai-works-questions.md"
+  }
+]
