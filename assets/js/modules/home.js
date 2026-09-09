@@ -1,3 +1,42 @@
+/* Lesson icon map by keyword */
+const LESSON_ICONS = {
+  'شبكة': '🌐',  'network': '🌐',
+  'أمن': '🔒',   'security': '🔒',
+  'قاعدة': '🗄️', 'database': '🗄️',
+  'خوارزم': '⚙️','algorithm': '⚙️',
+  'برمج': '💻',  'program': '💻',
+  'نظام': '🖥️',  'system': '🖥️',
+  'ذكاء': '🤖',  'ai': '🤖',
+  'سحاب': '☁️',  'cloud': '☁️',
+  'ويب': '🌍',   'web': '🌍',
+  'default': '📚',
+};
+
+function getLessonIcon(title) {
+  const lower = title.toLowerCase();
+  for (const [key, icon] of Object.entries(LESSON_ICONS)) {
+    if (lower.includes(key)) return icon;
+  }
+  return LESSON_ICONS.default;
+}
+
+/* Animated counter */
+function animateCounter(el, target, suffix = '') {
+  const duration = 900;
+  const start = performance.now();
+  const startVal = 0;
+
+  function step(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(startVal + (target - startVal) * eased);
+    el.textContent = current + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
 const HomeView = {
   renderLessons(lessons) {
     const grid = document.getElementById('lessons-grid');
@@ -5,24 +44,25 @@ const HomeView = {
 
     grid.innerHTML = lessons
       .map(
-        (lesson) => `
-      <article class="lesson-card" data-lesson-id="${lesson.id}">
+        (lesson, i) => `
+      <article class="lesson-card" data-lesson-id="${lesson.id}" style="animation-delay: ${i * 0.07}s">
         <div class="lesson-card-header">
           <span class="lesson-order">الدرس ${lesson.order}</span>
+          <div class="lesson-icon" aria-hidden="true">${getLessonIcon(lesson.titleAr + lesson.titleEn)}</div>
         </div>
         <h3>${lesson.titleAr}</h3>
         <p class="lesson-en">${lesson.titleEn}</p>
         <p class="lesson-desc">${lesson.description}</p>
         <div class="lesson-tags">
-          ${lesson.stats.mcq ? `<span class="tag">${lesson.stats.mcq} اختيار من متعدد</span>` : ''}
-          ${lesson.stats.truefalse ? `<span class="tag">${lesson.stats.truefalse} صح / خطأ</span>` : ''}
-          ${lesson.stats.matching ? `<span class="tag">${lesson.stats.matching} مزاوجة</span>` : ''}
-          ${lesson.stats.open ? `<span class="tag">${lesson.stats.open} أسئلة تحليلية</span>` : ''}
-          ${lesson.stats.exercises ? `<span class="tag">${lesson.stats.exercises} تمارين</span>` : ''}
+          ${lesson.stats.mcq ? `<span class="tag">📝 ${lesson.stats.mcq} اختيار</span>` : ''}
+          ${lesson.stats.truefalse ? `<span class="tag">✅ ${lesson.stats.truefalse} صح/خطأ</span>` : ''}
+          ${lesson.stats.matching ? `<span class="tag">🔗 ${lesson.stats.matching} مزاوجة</span>` : ''}
+          ${lesson.stats.open ? `<span class="tag">💬 ${lesson.stats.open} تحليلي</span>` : ''}
+          ${lesson.stats.exercises ? `<span class="tag">🏋️ ${lesson.stats.exercises} تمارين</span>` : ''}
         </div>
         <div class="lesson-card-footer">
-          <span class="lesson-meta-text">${lesson.stats.total} سؤال اختبار</span>
-          <button class="btn btn-primary" type="button">فتح الدرس</button>
+          <span class="lesson-meta-text">📊 ${lesson.stats.total} سؤال</span>
+          <button class="btn btn-primary" type="button">فتح الدرس ←</button>
         </div>
       </article>
     `
@@ -44,8 +84,8 @@ const HomeView = {
     const lessonsEl = document.getElementById('stat-lessons');
     const questionsEl = document.getElementById('stat-questions');
 
-    if (lessonsEl) lessonsEl.textContent = totalLessons;
-    if (questionsEl) questionsEl.textContent = totalQuestions + '+';
+    if (lessonsEl) animateCounter(lessonsEl, totalLessons);
+    if (questionsEl) animateCounter(questionsEl, totalQuestions, '+');
   },
 };
 
